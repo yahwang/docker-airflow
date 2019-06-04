@@ -32,7 +32,7 @@ $ docker-compose -f docker-compose-LocalExecutor.yml up -d
 
 - airflow container는 instance 또는 컴퓨터 reboot시 항상 재실행되는 설정이 되어 있음 (.yml에 restart 설정인 듯)
 
-<img src="./imgs/airflow_container.png" width="600px" alt="airflow_container_1">
+<img src="./imgs/airflow_container.png" width="700px" alt="airflow_container">
 
 ### 수정사항
 
@@ -58,21 +58,4 @@ sql_alchemy_conn = postgresql+psycopg2://airflow:airflow@docker-airflow_postgres
 
 3. docker-compose-LocalExecutor.yml 수정
 
-```
-webserver:
-        build:
-            context: .
-            dockerfile: Dockerfile
-       # instance 또는 컴퓨터 reboot시 항상 재실행되는 설정
-       # restart: always 
-        depends_on:
-            - postgres
-        environment:
-            # sample 데이터를 불러올 지 여부
-            - LOAD_EX=n
-            - EXECUTOR=Local
-        volumes:
-            - ./dags:/usr/local/airflow/dags
-            # Uncomment to include custom plugins
-            - ./plugins:/usr/local/airflow/plugins
-```            
+version 2에서 version 3.5으로 변경 후 내용 수정

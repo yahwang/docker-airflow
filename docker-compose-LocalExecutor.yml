@@ -1,17 +1,21 @@
-version: '2.1'
+version: '3.5'
 services:
     postgres:
         image: postgres:9.6
+        container_name: airflow_postgres
         environment:
             - POSTGRES_USER=airflow
             - POSTGRES_PASSWORD=airflow
             - POSTGRES_DB=airflow
+        networks:
+            - backend
 
     webserver:
         build:
             context: .
             dockerfile: Dockerfile
         #restart: always
+        container_name: airflow_webserver
         depends_on:
             - postgres
         environment:
@@ -19,8 +23,9 @@ services:
             - EXECUTOR=Local
         volumes:
             - ./dags:/usr/local/airflow/dags
-            # Uncomment to include custom plugins
             - ./plugins:/usr/local/airflow/plugins
+        networks:
+            - backend
         ports:
             - "8080:8080"
         command: webserver
@@ -29,3 +34,7 @@ services:
             interval: 30s
             timeout: 30s
             retries: 3
+        
+networks:
+    backend:
+        name: airflow_network
