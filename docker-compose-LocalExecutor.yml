@@ -8,8 +8,10 @@ services:
             - POSTGRES_DB=airflow
 
     webserver:
-        image: puckel/docker-airflow:1.10.2
-        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile
+        #restart: always
         depends_on:
             - postgres
         environment:
@@ -18,7 +20,7 @@ services:
         volumes:
             - ./dags:/usr/local/airflow/dags
             # Uncomment to include custom plugins
-            # - ./plugins:/usr/local/airflow/plugins
+            - ./plugins:/usr/local/airflow/plugins
         ports:
             - "8080:8080"
         command: webserver
