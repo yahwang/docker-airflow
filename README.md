@@ -20,15 +20,15 @@ $ docker-compose -f docker-compose-LocalExecutor.yml up -d
 
 ### container 정보
 
-- Airflow : docker-airflow_webserver_1 
+- Airflow : airflow_webserver
   
     port: 8080
   
-- PostgreSQL : docker-airflow_postgres_1
+- PostgreSQL : airflow_postgres
   
     port: 5432 user: airflow pw: airflow db: airflow
   
-- dockerairflow_default라는 네트워크에 연결되어 있음
+- airflow_network라는 네트워크에 연결되어 있음
 
 - airflow container는 instance 또는 컴퓨터 reboot시 항상 재실행되는 설정이 되어 있음 (.yml에 restart 설정인 듯)
 
@@ -49,8 +49,6 @@ executor = LocalExecutor
 
 sql_alchemy_conn = postgresql+psycopg2://airflow:airflow@docker-airflow_postgres_1:5432/airflow
 ```
-
-이 부분을 수정해야 airflow + 명령어를 수행할 수 있다. ( SequentialExecutor 오류가 나오는 문제 해결 )
 
 2. Dockerfile 수정
 
