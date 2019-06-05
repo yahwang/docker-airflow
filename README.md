@@ -36,6 +36,12 @@ $ docker-compose -f docker-compose-LocalExecutor.yml up -d
 
 ### 수정사항
 
+0. ver 1.10.3으로 업데이트
+
+참고 : https://github.com/alvyl/docker-airflow/tree/bump-version-v1.10.3
+
+다른 사용자가 만들어 둔 1.10.3 버전을 기반으로 전체적인 수정작업
+
 1. config/airflow.cfg 수정
 
 ``` python
@@ -50,12 +56,18 @@ sql_alchemy_conn = postgresql+psycopg2://airflow:airflow@docker-airflow_postgres
 
 추가 : 
 
-    pip install psycopg2-binary
+    apt-get install vim procps 
+    # procps: ps command 용도
+    pip install boto3
 
 삭제 :
 
-    pip install apache-airflow[postgres, mysql]
+    pip install apache-airflow[mysql, ..., 등등] # 불필요한 것 제거
+    USER 삭제 # USER 생성 시 dag가 작동이 잘 안 되는 듯...
 
-3. docker-compose-LocalExecutor.yml 수정
+3. docker-compose-LocalExecutor.yml
 
-version 2에서 version 3.5으로 변경 후 내용 수정
+``` python
+1. version 2에서 version 3.5으로 syntax 변경
+2. Dockerfile로 image를 빌드하도록 수정
+```
