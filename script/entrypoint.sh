@@ -27,6 +27,11 @@ export \
   AIRFLOW__CORE__SQL_ALCHEMY_CONN \
 
 
+# export FERNET_KEY to Variable
+echo "export AIRFLOW__CORE__FERNET_KEY="$AIRFLOW__CORE__FERNET_KEY >> ~/.bashrc
+
+source ~/.bashrc
+
 # Load DAGs exemples (default: Yes)
 if [[ -z "$AIRFLOW__CORE__LOAD_EXAMPLES" && "${LOAD_EX:=n}" == n ]]
 then

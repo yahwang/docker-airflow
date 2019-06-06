@@ -6,6 +6,9 @@ Session.vim
 .netrwhist
 *~
 
+## dags
+dags/*.py
+
 ### SublimeText ###
 # cache files for sublime text
 *.tmlanguage.cache
