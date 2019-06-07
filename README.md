@@ -10,7 +10,7 @@
 
 ## 컨테이너 생성 with LocalExecutor
 
-$ docker-compose -f docker-compose-LocalExecutor.yml up -d
+$ docker-compose up -d
 
 ## 추가 정보
 
@@ -63,7 +63,15 @@ sql_alchemy_conn = postgresql+psycopg2://airflow:airflow@docker-airflow_postgres
     pip install apache-airflow[mysql, ..., 등등] # 불필요한 것 제거
     USER 삭제 # USER 생성 시 dag가 작동이 잘 안 되는 듯...
 
-3. docker-compose-LocalExecutor.yml
+3. script/entrypoint.sh 수정
+
+추가 : 
+
+    # export FERNET_KEY to Variable
+    echo "export AIRFLOW__CORE__FERNET_KEY="$AIRFLOW__CORE__FERNET_KEY >> ~/.bashrc
+    source ~/.bashrc
+
+4. docker-compose-LocalExecutor.yml => docker-compose.yml
 
 ``` python
 1. version 2에서 version 3.5으로 syntax 변경
