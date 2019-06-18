@@ -14,7 +14,6 @@ TRY_LOOP="20"
 
 # Defaults and back-compat
 : "${AIRFLOW_HOME:="/usr/local/airflow"}"
-: "${AIRFLOW__CORE__FERNET_KEY:=${FERNET_KEY:=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)")}}"
 : "${AIRFLOW__CORE__EXECUTOR:=${EXECUTOR:-Sequential}Executor}"
 
 export \
@@ -22,15 +21,18 @@ export \
   AIRFLOW__CELERY__BROKER_URL \
   AIRFLOW__CELERY__RESULT_BACKEND \
   AIRFLOW__CORE__EXECUTOR \
-  AIRFLOW__CORE__FERNET_KEY \
   AIRFLOW__CORE__LOAD_EXAMPLES \
   AIRFLOW__CORE__SQL_ALCHEMY_CONN \
 
 
 # export FERNET_KEY to Variable
-echo "export AIRFLOW__CORE__FERNET_KEY="$AIRFLOW__CORE__FERNET_KEY >> ~/.bashrc
+if [[ -z "$AIRFLOW__CORE__FERNET_KEY" ]]
+then
+ AIRFLOW__CORE__FERNET_KEY=${FERNET_KEY:=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)")}}
+ echo "export AIRFLOW__CORE__FERNET_KEY="$FERNET_KEY >> ~/.bashrc
+ source ~/.bashrc
+fi
 
-source ~/.bashrc
 
 # Load DAGs exemples (default: Yes)
 if [[ -z "$AIRFLOW__CORE__LOAD_EXAMPLES" && "${LOAD_EX:=n}" == n ]]
@@ -76,7 +78,7 @@ fi
 
 case "$1" in
   webserver)
-    airflow initdb
+    airflow upgradedb
     if [ "$AIRFLOW__CORE__EXECUTOR" = "LocalExecutor" ]; then
       # With the "Local" executor it should all run in one container.
       airflow scheduler &

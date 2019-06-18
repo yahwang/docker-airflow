@@ -6,6 +6,7 @@ Session.vim
 .netrwhist
 *~
 
+.env
 ## dags
 dags/*.py
 
