@@ -57,6 +57,7 @@ sql_alchemy_conn = postgresql+psycopg2://airflow:airflow@docker-airflow_postgres
     apt-get install vim procps 
     # procps: ps command 용도
     pip install boto3
+    pip install psycopg2-binary
 
 삭제 :
 
@@ -65,11 +66,17 @@ sql_alchemy_conn = postgresql+psycopg2://airflow:airflow@docker-airflow_postgres
 
 3. script/entrypoint.sh 수정
 
+.env를 통해 AIRFLOW__CORE__FERNET_KEY를 입력받지 않으면 자동으로 생성 및 .bashrc에 저장
+
 추가 : 
 
     # export FERNET_KEY to Variable
-    echo "export AIRFLOW__CORE__FERNET_KEY="$AIRFLOW__CORE__FERNET_KEY >> ~/.bashrc
+    if [[ -z "$AIRFLOW__CORE__FERNET_KEY" ]]
+    then
+    AIRFLOW__CORE__FERNET_KEY=${FERNET_KEY:=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)")}}
+    echo "export AIRFLOW__CORE__FERNET_KEY="$FERNET_KEY >> ~/.bashrc
     source ~/.bashrc
+    fi
 
 4. docker-compose-LocalExecutor.yml => docker-compose.yml
 
