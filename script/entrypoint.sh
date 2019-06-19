@@ -42,7 +42,7 @@ fi
 
 # Install custom python package if requirements.txt is present
 if [ -e "/requirements.txt" ]; then
-    $(which pip) install --user -r /requirements.txt
+    $(which pip) install -r /requirements.txt
 fi
 
 if [ -n "$REDIS_PASSWORD" ]; then
@@ -76,9 +76,14 @@ if [ "$AIRFLOW__CORE__EXECUTOR" = "CeleryExecutor" ]; then
   wait_for_port "Redis" "$REDIS_HOST" "$REDIS_PORT"
 fi
 
+
+
 case "$1" in
   webserver)
     airflow upgradedb
+    # create supersuer
+    python /create_superuser.py $SUPERUSER_NAME $SUPERUSER_EMAIL $SUPERUSER_PW
+
     if [ "$AIRFLOW__CORE__EXECUTOR" = "LocalExecutor" ]; then
       # With the "Local" executor it should all run in one container.
       airflow scheduler &

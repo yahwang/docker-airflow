@@ -8,6 +8,18 @@
 
     docker image : https://hub.docker.com/r/puckel/docker-airflow
 
+## .env 생성 및 요구사항
+
+FERNETKEY 생성방법 : https://airflow.readthedocs.io/en/stable/howto/secure-connections.html#securing-connections
+
+    # fernet key 입력 (container restart를 해도 유지하기 위해 임의로 분리함)
+    AIRFLOW__CORE__FERNET_KEY
+
+    # admin user 정보 입력
+    SUPERUSER_NAME
+    SUPERUSER_EMAIL
+    SUPERUSER_PW
+
 ## 컨테이너 생성 with LocalExecutor
 
 $ docker-compose up -d
