@@ -81,8 +81,6 @@ fi
 case "$1" in
   webserver)
     airflow upgradedb
-    # create supersuer
-    python /create_superuser.py $SUPERUSER_NAME $SUPERUSER_EMAIL $SUPERUSER_PW
 
     if [ "$AIRFLOW__CORE__EXECUTOR" = "LocalExecutor" ]; then
       # With the "Local" executor it should all run in one container.
