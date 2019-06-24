@@ -22,9 +22,6 @@ services:
             - LOAD_EX=n
             - EXECUTOR=Local
             - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW__CORE__FERNET_KEY}
-            - SUPERUSER_NAME=${SUPERUSER_NAME}
-            - SUPERUSER_EMAIL=${SUPERUSER_EMAIL}
-            - SUPERUSER_PW=${SUPERUSER_PW}
         volumes:
             - ./dags:/usr/local/airflow/dags
             - ./plugins:/usr/local/airflow/plugins
