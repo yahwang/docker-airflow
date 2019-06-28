@@ -21,8 +21,6 @@ ARG PYTHON_DEPS=""
 ENV LANGUAGE en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
-ENV LC_CTYPE en_US.UTF-8
-ENV LC_MESSAGES en_US.UTF-8
 ENV AIRFLOW_HOME /usr/local/airflow
 
 RUN set -ex \
@@ -60,6 +58,7 @@ RUN set -ex \
     && pip install pyasn1 \
     && pip install boto3 \
     && pip install psycopg2-binary \
+    && pip install gevent \
     && pip install apache-airflow[crypto,ssh${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
     #&& pip install 'redis==3.2' \
     && if [ -n "${PYTHON_DEPS}" ]; then pip install ${PYTHON_DEPS}; fi \
@@ -67,7 +66,8 @@ RUN set -ex \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf \
-        /var/lib/apt/lists/* \
+        /var/lib/apt/lists/* \        
+        /root/.cache/pip/* \
         /tmp/* \
         /var/tmp/* \
         /usr/share/man \
