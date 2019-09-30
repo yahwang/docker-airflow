@@ -8,21 +8,31 @@
 
     docker image : https://hub.docker.com/r/puckel/docker-airflow
 
-## .env 생성 및 요구사항
+### .env 생성 ( 필수는 아님 )
+
+container restart를 실행해도 Key를 유지하기 위해 임의로 분리
 
 FERNETKEY 생성방법 : https://airflow.readthedocs.io/en/stable/howto/secure-connections.html#securing-connections
+    
+``` python
+pip install cryptography
+python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)"
+```
+    
+    # .env_dafult 파일 참고
+    AIRFLOW__CORE__FERNET_KEY= 발급받은 Key 입력
 
-    # fernet key 입력 (container restart를 해도 유지하기 위해 임의로 분리함)
-    AIRFLOW__CORE__FERNET_KEY
 
-    # admin user 정보 입력
-    SUPERUSER_NAME
-    SUPERUSER_EMAIL
-    SUPERUSER_PW
+## 컨테이너 생성 및 실행 with LocalExecutor
 
-## 컨테이너 생성 with LocalExecutor
+    $ docker-compose up -d
+    
+    # localhost:8080 접속이 가능한 이후, 
 
-$ docker-compose up -d
+    # Admin User 생성 ( airflow 접속 시 로그인을 요구함 )
+    $ docker exec airflow_webserver airflow create_user -r Admin -u ...
+    
+user 생성 함수 확인 : https://airflow.readthedocs.io/en/stable/cli.html#create_user
 
 ## 추가 정보
 
@@ -48,18 +58,29 @@ $ docker-compose up -d
 
 ### 수정사항
 
-0. ver 1.10.3으로 업데이트
-
-참고 : https://github.com/alvyl/docker-airflow/tree/bump-version-v1.10.3
-
-다른 사용자가 만들어 둔 1.10.3 버전을 기반으로 전체적인 수정작업
-
-1. config/airflow.cfg 수정
+1. config/airflow.cfg 수정 ( DB 설정 및 RBAC UI (FAB-based) 적용 )
 
 ``` python
-executor = LocalExecutor
+load_examples = False
 
+## DB 변경 설정
+executor = LocalExecutor
 sql_alchemy_conn = postgresql+psycopg2://airflow:airflow@docker-airflow_postgres_1:5432/airflow
+
+## RBAC UI 적용 설정
+
+# https://airflow.apache.org/security.html#web-authentication
+authenticate = False
+# Use FAB-based webserver with RBAC feature
+rbac = True
+
+## worker 설정
+
+# Number of workers to run the Gunicorn web server
+workers = 2
+# The worker class gunicorn should use. Choices include
+# sync (default), eventlet, gevent
+worker_class = gevent
 ```
 
 2. Dockerfile 수정
@@ -68,8 +89,9 @@ sql_alchemy_conn = postgresql+psycopg2://airflow:airflow@docker-airflow_postgres
 
     apt-get install vim procps 
     # procps: ps command 용도
+    
     pip install boto3
-    pip install psycopg2-binary
+    pip install gevent
 
 삭제 :
 
