@@ -32,7 +32,7 @@ python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_
     # Admin User 생성 ( airflow 접속 시 로그인을 요구함 )
     $ docker exec airflow_webserver airflow create_user -r Admin -u ...
     
-user 생성 함수 확인 : https://airflow.readthedocs.io/en/stable/cli.html#create_user
+user 생성 함수 확인 : https://airflow.apache.org/docs/stable/cli.html#create_user
 
 ## 추가 정보
 
@@ -57,6 +57,14 @@ user 생성 함수 확인 : https://airflow.readthedocs.io/en/stable/cli.html#cr
 <img src="./imgs/airflow_container.png" width="700px" alt="airflow_container">
 
 ### 수정사항
+
+0. Airflow 1.10.3 사용 시 이슈
+
+flask 1.10 이후 버전과 호환 문제가 발생해서 다운그레이드해야 한다.
+
+``` python
+pip install Flask==1.10.4
+```
 
 1. config/airflow.cfg 수정 ( DB 설정 및 RBAC UI (FAB-based) 적용 )
 
@@ -89,9 +97,6 @@ worker_class = gevent
 
     apt-get install vim procps 
     # procps: ps command 용도
-    
-    pip install boto3
-    pip install gevent
 
 삭제 :
 
