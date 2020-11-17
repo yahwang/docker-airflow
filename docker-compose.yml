@@ -23,6 +23,7 @@ services:
             - EXECUTOR=Local
             - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW__CORE__FERNET_KEY}
         volumes:
+            - ./.aws:/root/.aws
             - ./dags:/usr/local/airflow/dags
             - ./plugins:/usr/local/airflow/plugins
         networks:

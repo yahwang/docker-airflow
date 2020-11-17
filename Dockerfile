@@ -47,6 +47,7 @@ RUN set -ex \
     $BUILD_DEPS \
     && localedef -f UTF-8 -i en_US en_US.UTF-8 \
     && pip install -U pip setuptools wheel \
+    && pip install email_validator \
     && pip install pytz \
     && pip install pyOpenSSL \
     && pip install ndg-httpsclient \
