@@ -38,6 +38,8 @@ RUN set -ex \
     libssl-dev \
     libffi-dev \
     libpq-dev \
+    python3-dev \
+    default-libmysqlclient-dev \
     git \
     " \
     && apt-get update -yqq \
@@ -54,7 +56,7 @@ RUN set -ex \
     && pip install pyasn1 \
     && pip install Flask==1.0.4 \
     && pip install 'tzlocal<2.0.0.0, >=1.5.0.0' \
-    && pip install apache-airflow[crypto,postgres,ssh${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
+    && pip install apache-airflow[crypto,postgres,mysql,ssh${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
     && apt-get purge --auto-remove -yqq $buildDeps \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \

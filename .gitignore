@@ -10,6 +10,7 @@ Session.vim
 .aws/credentials
 ## dags
 dags/*.py
+dags/funcs/*.py
 
 ### SublimeText ###
 # cache files for sublime text

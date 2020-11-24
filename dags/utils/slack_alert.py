@@ -6,7 +6,7 @@ class SlackAlert:
 
     def slack_fail_alert(self, context):
         alert = SlackWebhookHookFixed(
-            http_conn_id="slack_conn",
+            http_conn_id="slack-conn",
             channel=self.channel,
             username='airflow_bot',
             message = """
